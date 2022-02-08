@@ -3,14 +3,6 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <h3>{{user.username | capitalize}}</h3>
-            {% if user.bio %}
-            <p>{{user.bio}}</p>
-            {% else %}
-            <p>{{user.username | capitalize}} Has no bio</p>
-            {% endif %}
-        </div>
-        <div class="col-md-4">
             {% if user.profile_pic_path %}
             <img src="{{url_for('static', filename = user.profile_pic_path)}}" alt="" class="img-thumbnail">
             {% else %}
@@ -23,9 +15,33 @@
             </form>
             {% endif %}
         </div>
-        {% if user == current_user %}
-        <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
+        <div class="col-md-4">
+            <h3>{{user.username | capitalize}}</h3>
+            {% if user.bio %}
+            <p>{{user.bio}}</p>
+            {% else %}
+            <p>{{user.username | capitalize}} Has no bio</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            {% if user == current_user %}
+            <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <h1>Pitches</h1>
+        {% if pitches %}
+        <h1>Ruweydha</h1>
+        {% for pitch in pitches %}
+        <p>{{pitch.content}}</p>
+        <a href="/user/pitch/new/{{user.id}}">Write another pitch</a>
+        {% endfor %}
+        {% else %}
+        <h3>You have no pitches yet</h3>
+        <a href="/user/pitch/new/{{user.id}}">Write new pitch</a>
         {% endif %}
+
     </div>
 </div>
 {% endblock %}
