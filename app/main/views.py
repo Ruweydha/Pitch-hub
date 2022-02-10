@@ -1,6 +1,3 @@
-from crypt import methods
-from os import uname
-from unicodedata import category
 from flask import redirect, render_template, url_for, abort,request
 from flask_login import current_user, login_required
 from . import main

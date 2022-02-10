@@ -1,4 +1,3 @@
-from email.policy import default
 from sqlalchemy import ForeignKey
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
