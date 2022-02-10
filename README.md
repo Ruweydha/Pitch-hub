@@ -6,9 +6,6 @@ A website where a user can be able to view pitches from other people, comment on
 
 1. Clone the repository
 
-```bash
-git@github.com:githaefrancis/pitch-pitcher.git
-```
 
 2. Navigate to project folder
 
