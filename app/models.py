@@ -1,5 +1,4 @@
 from email.policy import default
-from this import d
 from sqlalchemy import ForeignKey
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,6 +21,7 @@ class User(UserMixin, db.Model):
     profile_pic_path = db.Column(db.String(255))
     pass_secure = db.Column(db.String(255))
     pitches = db.relationship('Pitches',backref = 'pitcher',lazy = "dynamic")
+    comments_id = db.relationship('Comments', backref = 'commenter', lazy ='dynamic')
 
     @property
     def password(self):
@@ -55,6 +55,8 @@ class Pitches(db.Model):
     content = db.Column(db.String(255))
     date_posted = db.Column(db.DateTime,default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    comments_id = db.relationship('Comments', backref = 'comments', lazy ='dynamic')
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
     def save_pitch(self):
         db.session.add(self)
@@ -64,3 +66,28 @@ class Pitches(db.Model):
     def get_pitch (cls, id):
         pitches = Pitches.query.filter_by(user_id = id).all()
         return pitches
+
+class Comments(db.Model):
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key = True)
+    comment = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime,default=datetime.utcnow)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def save_comment(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comment(cls, id) :
+        comments = Comments.query.filter_by(pitch_id = id).all()
+        return comments  
+
+class Category(db.Model) :
+    __tablename__ = 'category'
+
+    id = db.Column(db.Integer, primary_key = True)
+    category = db.Column(db.String(255))
+    pitch_id = db.relationship('Pitches', backref = 'categories', lazy = 'dynamic')
