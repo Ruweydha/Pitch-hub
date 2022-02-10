@@ -1,46 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
-            {% if user.profile_pic_path %}
-            <img src="{{url_for('static', filename = user.profile_pic_path)}}" alt="" class="img-thumbnail">
-            {% else %}
-            <p>No profile picture</p>
+
+            <div class="col-md-3">
+                {% if user.profile_pic_path %}
+                <img src="{{url_for('static', filename = user.profile_pic_path)}}" style="width: 300px; height: 300px; border-radius: 500%;"  alt="" class="img-fluid">
+                {% else %}
+                <p style="color: #023047;" class="mt-5">No profile picture</p>
+                {% endif %}
+             </div>
+    
+            <div class="col-md-2 pt-5">
+                <h2 style ="color: #023047;">{{user.username | capitalize}}</h2>
+                {% if user.bio %}
+                <p style="color: #023047;">{{user.bio}}</p>
+                {% else %}
+                <p style="color: #023047;">{{user.username | capitalize}} Has no bio</p>
+                {% endif %}
+
+            </div>
+            <div class="col-md-7 pt-5">
+                {% if user == current_user %}
+                <div class="col-md-6">
+                    {% if user.profile_pic_path %}
+                    <h3 style="color: #023047;">Change profile Picture</h3>
+                    {% else %}
+                    <h3 style="color: #023047;">Add profile picture</h3>
+                    {% endif %}
+                    <form action="{{url_for('main.update_pic', uname = user.username)}}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="photo" class="form-control" required>
+                        <input class="mt-2" type="submit">
+                    </form>
+                </div>
             {% endif %}
-            {% if user == current_user %}
-            <form action="{{url_for('main.update_pic', uname = user.username)}}" method="post" enctype="multipart/form-data">
-                <input type="file" name="photo" class="form-control" required>
-                <input type="submit">
-            </form>
-            {% endif %}
-        </div>
-        <div class="col-md-4">
-            <h3>{{user.username | capitalize}}</h3>
-            {% if user.bio %}
-            <p>{{user.bio}}</p>
-            {% else %}
-            <p>{{user.username | capitalize}} Has no bio</p>
-            {% endif %}
-        </div>
-        <div class="col-md-4">
-            {% if user == current_user %}
-            <a href="{{url_for('main.update_profile',uname=user.username)}}">Edit profile</a>
-            {% endif %}
-        </div>
+            </div>
+    
     </div>
     <div class="row">
-        <h1>Pitches</h1>
+       
+    </div>
+    <div class="row">
+        <h1 class="text-center mt-3" style="color: #023047 ;" >Pitches</h1>
         {% if pitches %}
-        <h1>Ruweydha</h1>
         {% for pitch in pitches %}
-        <p>{{pitch.content}}</p>
-        <a href="/user/pitch/new/{{user.id}}">Write another pitch</a>
+        <div class="card " style="width: 70%; border-left: none; border-right: none; margin: auto; background-color: #cfdbd5;">
+            <div class="card-body">
+              <p>{{pitch.content}}</p>
+            </div>
+          </div>
+        
         {% endfor %}
         {% else %}
         <h3>You have no pitches yet</h3>
-        <a href="/user/pitch/new/{{user.id}}">Write new pitch</a>
         {% endif %}
+        <div class="text-center mt-3">
+            <button class="btn btn-secondary"><a href="/user/pitch/new/{{user.id}}" style="color: white; text-decoration: none;">Write new pitch</a></button>
+        </div>
+        
 
     </div>
 </div>
